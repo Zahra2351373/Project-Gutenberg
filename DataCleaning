@@ -1,0 +1,37 @@
+import string
+
+def load_doc(republic_clean):
+	file = open(republic_clean, 'r')
+	text = file.read()
+	file.close()
+	return text
+
+def clean_doc(doc):
+	doc = doc.replace('--', ' ')
+	tokens = doc.split()
+	table = str.maketrans('', '', string.punctuation)
+	tokens = [w.translate(table) for w in tokens]
+	tokens = [word for word in tokens if word.isalpha()]
+	tokens = [word.lower() for word in tokens]
+	return tokens
+
+def save_doc(lines, republic_clean):
+	data = '\n'.join(lines)
+	file = open(republic_clean, 'w')
+	file.write(data)
+	file.close()
+
+in_filename = 'republic_clean.txt'
+doc = load_doc(in_filename)
+
+tokens = clean_doc(doc)
+
+length = 50 + 1
+sequences = list()
+for i in range(length, len(tokens)):
+	seq = tokens[i-length:i]
+	line = ' '.join(seq)
+	sequences.append(line)
+
+out_filename = 'republic_sequences.txt'
+save_doc(sequences, out_filename)
